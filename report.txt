@@ -1,0 +1,27 @@
+An advantage of our filesystem is that all of the necessary data is stored in
+the inode struct. This data includes the path of the inode. This means that
+once you have the inode that you need, everything besides adding more pages
+to it can be done in constant time. The disadvantage of our filesystem is that
+the amount of data to store an inode is 128 bytes. This accomnpanied with the
+fact that we are choosing to store our bitmaps as list of chars takes up a
+decent amount of space in metadata. Since we are also storing the file path in
+the inode struct, this means that we had to determine a max size for the path.
+We cannot handle file paths that are larger than 64 characters. We also did not
+set up indirect blocks, so we should not be able to handle large files. In
+order to avoid bit-shifting for the bitmaps, we instead went for the smallest
+size data type, a char, to represent a boolean of used or not. With more time
+we would consider moving the path outside of the inode struct as a global list
+of file paths with their associated inode number. We would also take the time
+to figure out the bit wise math to make our bitmaps be actual bitmaps, saving
+a decent amount of space in meta data.  We would also implement indirect
+blocks so that we could handle large files.
+
+Our filesystem has only a root directory that you can place files or
+directories in. We can run ls to see the current contents of the root directory.
+We can create files and we can read and write to files. We can create more
+directories in the root directory, and we can move files into those directories
+as the tests show. We were able to implement deleting and renaming of files. We
+implemented hard links. We can read and write to files larger than one block.
+We can remove directories. We have meta data that holds the permissions for a
+file, but we do not handle timestamps. We can even change the permissons of a
+file.
